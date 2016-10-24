@@ -86,7 +86,7 @@
   "use strict";
 
   function preventSubmit(evt) {
-    evt.preventDefault()
+    evt.preventDefault();
     alert("I'm an alert box!");
   };
 
@@ -229,18 +229,6 @@
 <p>End of Skills Assessment. Read on for advanced problems. :)</p>
 
 
-
-<h2>Advanced!</h2>
-<p>
-  Hey, we know you're smart and becoming a Javascript ninja. So we've given you these
-  exercises which are, frankly, really tough. Don't feel bad if you need to practice the
-  above a few times first, or need to get some hints or help here. They're trickier and
-  definitely take much longer.
-</p>
-<p>You can either do these with or without jQuery, as you please.</p>
-<p>But, really, these are <blink>hard</blink>.</p>
-
-
 <h3>An Agreeable Form</h3>
 <p>
   When the user submits the form below, it should fill in the div to agree with the
@@ -260,16 +248,16 @@
 
 <script>
   "use strict";
-  // put your code here
+
+  function showFood(evt) {
+    evt.preventDefault();
+
+    var favFood = "I like " + $("#favorite-food-input").val() + ", too.";
+    $('#agreeable-text').html(favFood);
+  }
+
+  $('#favorite-food-input + input').on('click', showFood);
 </script>
-
-<div class="hint">
-  <div>
-    Remember how to find the current value in an input field
-    using jQuery? If not, try using <code>console.dir(object)</code> or StackOverflow!
-  </div>
-</div>
-
 
 <h3>Number-Guessing Game</h3>
 <p>
@@ -290,20 +278,48 @@
 
 <script>
   "use strict";
-  // put your code here
+
+function playAnnoyingGame() {
+
+  var number = Math.floor((Math.random() * 100) + 1);
+  var playing = true;
+
+
+  while (playing) {
+    // prompt the user to guess the number
+    var guess = prompt("Hi! Try to guess my number between 1 and 100: ");
+    guess = parseInt(guess);
+    
+    // If guess is not between 1 and 100, scold the user
+    if (guess < 1 || guess > 100) {
+      alert("Please enter a number between 1 and 100. Guess again!");
+      playing = true;
+    }
+    // If the user guesses too low, tell them to guess againg
+    else if (guess < number) {
+      alert("Sorry! Your guess is too low. Guess again!");
+      playing = true;
+    }
+    // If the user guesses too high, tell them to guess againg
+    else if (guess > number) {
+      alert("Sorry! Your guess is too high. Guess again!");
+      playing = true;
+    }
+    // If the user guesses the correct number, congratulate them.
+    else {
+      alert("You guessed correctly!");
+      playing = confirm("Press OK To keep playing or Cancel to quit");
+      // Create new number
+      number = Math.floor((Math.random() * 100) + 1);
+    };
+  }
+}
+
+$('#play-guessing-game').on('click', playAnnoyingGame);
+
+
+
 </script>
-
-<div class="hint">
-  <div>
-    How do you turn the string "42" into the integer 42 in Javascript? I'll bet
-    StackOverflow knows!
-  </div>
-</div>
-
-
-
-
-
 
 <h3>Less Annoying Number-Guessing Game</h3>
 <p>
@@ -331,10 +347,72 @@
 
 <script>
   "use strict";
-  // put your code here
+
+function playGame() {
+
+  var number = Math.floor((Math.random() * 100) + 1);
+  console.log(number);
+  var playing = true;
+
+  $("#play-guessing-game-2").attr('disabled', 'disabled');
+
+  $("#number-guessed").removeAttr('disabled');
+
+  $("#guessing-game-2-form").keyup(function(){
+    $("#try-this-number").removeAttr('disabled');
+  });
+
+  $("#number-guessing-msg").html("Hi! Try to guess my number between 1 and 100: ");
+
+  
+  $("#try-this-number").click(function(evt){
+    evt.preventDefault();  
+
+    if (playing) {
+      // prompt the user to guess the number
+      var msg = '';
+      var guess = $("#number-guessed").val();
+
+    
+      // If guess is not between 1 and 100, scold the user
+      if (guess < 1 || guess > 100) {
+        msg = "Please enter a number between 1 and 100. Guess again!";
+        $("#number-guessing-msg").html(msg);
+        playing = true;
+
+        console.log("meh guess");
+      }
+      // If the user guesses too low, tell them to guess againg
+      else if (guess < number) {
+        msg = "Sorry! Your guess is too low. Guess again!";
+        $("#number-guessing-msg").html(msg);
+
+        console.log("better guess");
+        playing = true;
+      }
+      // If the user guesses too high, tell them to guess againg
+      else if (guess > number) {
+        msg = "Sorry! Your guess is too high. Guess again!";
+        $("#number-guessing-msg").html(msg);
+        playing = true;
+      }
+      // If the user guesses the correct number, congratulate them.
+      else {
+        msg = "You guessed correctly! Click play to play again.";
+        $("#number-guessing-msg").html(msg);
+        $("#play-guessing-game-2").removeAttr('disabled');
+
+        playing = false;
+        // Create new number
+        number = Math.floor((Math.random() * 100) + 1);
+      };
+    } 
+  });
+}
+
+$('#play-guessing-game-2').on('click', playGame);
+
 </script>
-
-
 
 
 <h3>Five Colored Primes</h3>
@@ -362,45 +440,36 @@
 <script>
   "use strict";
 
-    var PRIME_COLORS = ['orange', 'midnightblue', 'darkgoldenrod', 'green', 'purple'];
-
-  // put the rest of your code here
-</script>
+    var PRIME_COLORS = ['aliceblue', 'maroon', 'teal', 'paleVioletRed', 'DarkTurquoise'];
 
 
+    var numbers = [], primes = [], maxNumber = 11;
 
+    for(var i = 2;i<=maxNumber;i++){
+     numbers.push(i);   
+    }
 
+    while(numbers.length){
+        primes.push(numbers.shift());
+        numbers = numbers.filter(
+            function(i){return i%primes[primes.length-1]!=0}
+        );
+    }
 
-<h3>CSS Stuff</h3>
-<p>
-  For those of you interested in more intermediate/complex
-  CSS, take a look at the CSS we use on this page&mdash;it shows off some
-  interesting pseudo-selectors like <code>:before</code> and uses things
-  like CSS numbering. Neat stuff.
-</p>
+    console.log(primes);
 
-
-
-
-
-<script>
-  "use strict";
-
-  // Blink text FTW!
-
-  var blinkies = document.getElementsByTagName("blink");
-
-  function blink() {
-    for (var i = 0; i < blinkies.length; i++) {
-      var item = blinkies[i];
-      if (item.style.color == 'white') {
-        item.style.color = 'black';
-      } else {
-        item.style.color = 'white';
+    function addPrimes() {
+      for (i=0; i<primes.length; i++) {
+        var newPrime = primes[i];
+        var newColor = PRIME_COLORS[i];
+        
+        $('#prime-box-area').append("<div class='prime-box' style='background-color: " + newColor + "'>" + newPrime + "</div>");
       }
     }
-  }
-  setInterval(blink, 500);
+
+    $('#make-prime-boxes').on('click', addPrimes);
+
+
 </script>
 
 
